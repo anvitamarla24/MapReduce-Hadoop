@@ -46,6 +46,9 @@ public class WordCount {
     }
 
     public static void main(String[] args) throws Exception {
+
+        // this is an example comment
+
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
