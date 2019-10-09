@@ -1,4 +1,3 @@
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -12,6 +11,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WordCount {
 
@@ -26,27 +27,27 @@ public class WordCount {
         ) throws IOException, InterruptedException {
 
             //QUESTION 2 - Printing the filename, line number and line.
+            //COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q3
             String lno = key.toString();
             String  l = value.toString();
-            String str1 =  "door";
-
-
             String fileName = "\n" + ((FileSplit) context.getInputSplit()).getPath().getName();
             // referred - https://stackoverflow.com/questions/19012482/how-to-get-the-input-file-name-in-the-mapper-in-a-hadoop-program
 
             String[] lines = l.split("[!?.:]+"); //to get each line from all the lines
             for(String line : lines) {
-                //line = line.replaceAll("\\s+"," "); //removing whitespaces
                 line = line.replaceAll("[^a-zA-Z ]", ""); //removing punctuations
-                line = line.replaceAll("\\s+"," ");
-                if (StringUtils.containsIgnoreCase(line, "door")) {
-                    //String[] lines = l.split("[!?.:]+");
+                line = line.replaceAll("\\s+"," "); //removing whitespaces
+                Pattern pattern = Pattern.compile("\\bdoor\\b", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()){
                     String ll = line.toString();
                     context.write(new Text(fileName), new Text(lno + " " + ll));
-                }//Q2 if
-            }//Q2 for
-                        /*
+                }
+            }
+
+            /* COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q2
             //Question 3
+            //referred - https://stackoverflow.com/questions/32714295/hadoop-decompressed-zip-files
 
             String filename = key.toString();
 
@@ -58,20 +59,18 @@ public class WordCount {
             String content = new String(value.getBytes(), "UTF-8");
             String[] lines = content.split("[!?.:]+");
             for(String line : lines) {
-                line = line.replaceAll("\\s+"," "); //removing whitespaces
-                line = line.replaceAll("[^a-zA-Z ]", ""); //removing punctuations
                 count ++;
-                if (StringUtils.containsIgnoreCase(line, "door")) {
-                    //String[] lines = l.split("[!?.:]+");
+                line = line.replaceAll("[^a-zA-Z ]", ""); //removing punctuations
+                line = line.replaceAll("\\s+"," "); //removing whitespaces
+                Pattern pattern = Pattern.compile("\\bdoor\\b", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()){
                     String ll = line.toString();
                     context.write(new Text(filename), new Text(count + " " + ll));
-                }//Q3 if
-            }//Q3 for
 
-             */
-
-
-
+                }//Q3 while ends
+            }//Q3 for ends
+            */
         }
     }
 
@@ -98,20 +97,21 @@ public class WordCount {
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
 
-        //Comment the following lines while executing Q2
+        //Comment the following two lines while executing Q2 and uncomment them while executing Q3
         //job.setInputFormatClass(NYUZInputFormat.class);
         //job.setOutputKeyClass(TextOutputFormat.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        //Comment the following lines while executing Q2
+        //Comment the following two lines while executing Q2 and uncomment them while executing Q3
         //NYUZInputFormat.setInputPaths(job, new Path(args[0]));
         //FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        //Comment the following two lines for executing Q3 (line 107 and 108)
+        //Comment the following two lines while executing Q3 and uncomment them while executing Q2
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

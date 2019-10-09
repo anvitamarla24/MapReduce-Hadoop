@@ -1,3 +1,4 @@
+//referred - https://stackoverflow.com/questions/32714295/hadoop-decompressed-zip-files
 //package edu.nyu.tandon.bigdata.hadoop;
 
 import java.io.IOException;
@@ -19,33 +20,14 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
-/*** Custom Hadoop Record Reader : zipped file
- *
- * We want to produce (K,V) pairs where
- *    K = filename inside the zip file
- *    V = bytes corresponding to the file
- *
- * ***/
 public class NYUZRecordReader extends RecordReader<Text, Text> {
 
-    /** InputStream used to read the ZIP file from the FileSystem */
+
     private FSDataInputStream fsin;
-
-    /** ZIP file parser/decompresser */
     private ZipInputStream zip;
-
-    /** Uncompressed file name */
     private Text currentKey;
-
-    /** Uncompressed file contents */
     private Text currentValue;
-
-    /** Used to indicate progress */
     private boolean isFinished = false;
-
-    /**
-     * Initialise and open the ZIP file from the FileSystem
-     */
 
     @Override
     public void initialize(InputSplit inputSplit, TaskAttemptContext context) throws IOException, InterruptedException {
@@ -57,7 +39,6 @@ public class NYUZRecordReader extends RecordReader<Text, Text> {
         // Open the stream
         fsin = fs.open(path);
         zip = new ZipInputStream(fsin);
-
 
     }
 
@@ -127,11 +108,6 @@ public class NYUZRecordReader extends RecordReader<Text, Text> {
         // Uncompressed contents
         currentValue = new Text(bos.toString());
         return true;
-
-
-/**
- * Rather than calculating progress, we just keep it simple
- */
 
     }
 
