@@ -42,8 +42,8 @@ public class WordCount {
                 while (matcher.find()){
                     String ll = line.toString();
                     context.write(new Text(fileName), new Text(lno + " " + ll));
-                }
-            }
+                }//Q2 while ends
+            }//Q2 for ends
 
             /*
             //Question 3 - Print the filename, line number and line where input is a zip file.
