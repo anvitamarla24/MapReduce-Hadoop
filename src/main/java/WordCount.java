@@ -26,7 +26,7 @@ public class WordCount {
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
 
-            //QUESTION 2 - Printing the filename, line number and line.
+            //QUESTION 2 - Printing the filename, line number and line where input is a text file.
             //COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q3
             String lno = key.toString();
             String  l = value.toString();
@@ -45,8 +45,9 @@ public class WordCount {
                 }
             }
 
-            /* COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q2
-            //Question 3
+            /*
+            //Question 3 - Print the filename, line number and line where input is a zip file.
+            //COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q2
             //referred - https://stackoverflow.com/questions/32714295/hadoop-decompressed-zip-files
 
             String filename = key.toString();
