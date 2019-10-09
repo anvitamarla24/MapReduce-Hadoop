@@ -25,7 +25,7 @@ public class WordCount {
 
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
-
+            /*
             //QUESTION 2 - Printing the filename, line number and line where input is a text file.
             //COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q3
             String lno = key.toString();
@@ -44,8 +44,8 @@ public class WordCount {
                     context.write(new Text(fileName), new Text(lno + " " + ll));
                 }//Q2 while ends
             }//Q2 for ends
+            */
 
-            /*
             //Question 3 - Print the filename, line number and line where input is a zip file.
             //COMMENT THE FOLLOWING BLOCK OF CODE WHILE EXECUTING Q2
             //referred - https://stackoverflow.com/questions/32714295/hadoop-decompressed-zip-files
@@ -55,23 +55,24 @@ public class WordCount {
             // We only want to process .txt files
             if (filename.endsWith(".txt") == false)
                 return;
-            int count = 0;
+            int i = 0;
             // Prepare the content
             String content = new String(value.getBytes(), "UTF-8");
             String[] lines = content.split("[!?.:]+");
-            for(String line : lines) {
-                count ++;
-                line = line.replaceAll("[^a-zA-Z ]", ""); //removing punctuations
-                line = line.replaceAll("\\s+"," "); //removing whitespaces
+            //for(String line : lines) {
+            for(i = 0; i < lines.length; i++){
+                //count ++;
+                lines[i] = lines[i].replaceAll("[^a-zA-Z ]", ""); //removing punctuations
+                lines[i] = lines[i].replaceAll("\\s+"," "); //removing whitespaces
                 Pattern pattern = Pattern.compile("\\bdoor\\b", Pattern.CASE_INSENSITIVE);
-                Matcher matcher = pattern.matcher(line);
+                Matcher matcher = pattern.matcher(lines[i]);
                 while (matcher.find()){
-                    String ll = line.toString();
-                    context.write(new Text(filename), new Text(count + " " + ll));
+                    String ll = lines[i].toString();
+                    context.write(new Text(filename), new Text(i + " " + ll));
 
                 }//Q3 while ends
             }//Q3 for ends
-            */
+
         }
     }
 
@@ -99,19 +100,19 @@ public class WordCount {
         job.setReducerClass(IntSumReducer.class);
 
         //Comment the following two lines while executing Q2 and uncomment them while executing Q3
-        //job.setInputFormatClass(NYUZInputFormat.class);
-        //job.setOutputKeyClass(TextOutputFormat.class);
+        job.setInputFormatClass(NYUZInputFormat.class);
+        job.setOutputKeyClass(TextOutputFormat.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
         //Comment the following two lines while executing Q2 and uncomment them while executing Q3
-        //NYUZInputFormat.setInputPaths(job, new Path(args[0]));
-        //FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        NYUZInputFormat.setInputPaths(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         //Comment the following two lines while executing Q3 and uncomment them while executing Q2
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        //FileInputFormat.addInputPath(job, new Path(args[0]));
+        //FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
