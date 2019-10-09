@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WordCount {
+public class question_2 {
 
     public static class TokenizerMapper
             extends Mapper<Object, Text, Text, Text> {
@@ -93,7 +93,7 @@ public class WordCount {
         // this is an example comment
 
         Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, "question_2");
+        Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WordCount.TokenizerMapper.class);
         job.setCombinerClass(IntSumReducer.class);
