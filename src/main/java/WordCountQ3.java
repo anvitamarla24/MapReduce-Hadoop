@@ -78,15 +78,10 @@ public class WordCountQ3 {
         job.setMapperClass(WordCountQ3.TokenizerMapper.class);
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
-
-        //Comment the following two lines while executing Q2 and uncomment them while executing Q3
         job.setInputFormatClass(NYUZInputFormat.class);
         job.setOutputKeyClass(TextOutputFormat.class);
-
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
-
-        //Comment the following two lines while executing Q2 and uncomment them while executing Q3
         NYUZInputFormat.setInputPaths(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
