@@ -1,5 +1,3 @@
-# MyFirstRepo
-
 ASSIGNMENT 1:
 Anvita Marla
 N19407076
